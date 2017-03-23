@@ -14,8 +14,10 @@ public final class MyWebApp extends App {
      * Register your routes and middleware here.
      */
     @Override
-    public void register() {
+    protected void register() {
         Controller controller = Controller.getInstance();
         Spark.get("/", controller::index);
     }
+
+
 }

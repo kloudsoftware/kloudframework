@@ -1,6 +1,7 @@
 package io.kloudwork.app;
 
 import io.kloudwork.config.Config;
+import io.kloudwork.controller.LoginController;
 import spark.Spark;
 
 import javax.persistence.EntityManager;
@@ -22,10 +23,22 @@ public abstract class App {
     public void start() {
         config = initConfig();
         entityManager = initDatabase();
+        registerAuthRoutes();
         register();
     }
 
-    public abstract void register();
+    protected void registerAuthRoutes() {
+        LoginController loginController = LoginController.getInstance();
+        Spark.get("/login", loginController::login);
+        Spark.get("/logout", loginController::logout);
+        Spark.get("/register", loginController::register);
+
+        Spark.post("/login", loginController::postLogin);
+        Spark.post("/logout", loginController::postLogout);
+        Spark.post("/register", loginController::postRegister);
+    }
+
+    protected abstract void register();
 
     private Config initConfig() {
         Config config = null;
