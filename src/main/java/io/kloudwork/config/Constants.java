@@ -12,5 +12,5 @@ public class Constants {
      *
      * Path is relative from the home directory.
      */
-    public static final String CONFIG_FILE = ".kloudwork.properties";
+    public static final String CONFIG_FILE = "kloudwork.properties";
 }
