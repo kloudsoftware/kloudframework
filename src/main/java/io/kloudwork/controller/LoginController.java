@@ -26,8 +26,6 @@ public class LoginController {
     }
 
     public String postLogin(Request request, Response response) {
-        request.body();
-
         return "";
     }
 
