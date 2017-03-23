@@ -5,7 +5,7 @@ public class Constants {
     /**
      * The name of the app.
      */
-    public static final String APP_NAME = "Kloud Framwork";
+    public static final String APP_NAME = "Kloud Framework";
 
     /**
      * The config file.
