@@ -1,4 +1,4 @@
-[![Build Status](http://127.0.0.1:8080/buildStatus/icon?job=Kloudwork)](http://127.0.0.1:8080/job/Kloudwork/)
+[![Build Status](https://jenkins.kloudfile.io/buildStatus/icon?job=Kloudwork)](https://jenkins.kloudfile.io/job/Kloudwork/)
 # Kloudwork
 
 The next big thing for the kloud.
