@@ -3,14 +3,14 @@ package io.kloudwork.config;
 public class Constants {
 
     /**
-     * The name of the io.kloudwork.app.
+     * The name of the app.
      */
-    public static final String APP_NAME = "Spark-Template";
+    public static final String APP_NAME = "Kloud Framwork";
 
     /**
-     * The io.kloudwork.config file.
+     * The config file.
      *
      * Path is relative from the home directory.
      */
-    public static final String CONFIG_FILE = ".spark-templates.properties";
+    public static final String CONFIG_FILE = ".kloudwork.properties";
 }

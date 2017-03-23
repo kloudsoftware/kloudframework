@@ -8,7 +8,7 @@ import java.util.Properties;
 public class Config {
 
     private static File configFile = new java.io.File(System.getProperty("user.home") + "/" + Constants.CONFIG_FILE);
-    private static File configFileDir = new java.io.File(System.getProperty("user.home") + "/.push");
+    private static File configFileDir = new java.io.File(System.getProperty("user.home"));
     private Properties properties;
 
     public Config() throws IOException {
