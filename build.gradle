@@ -2,6 +2,9 @@ group 'io.kloudfile'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "io.kloudwork.MyWebApp"
 
 sourceCompatibility = 1.8
 
