@@ -13,16 +13,15 @@ import java.util.Map;
 
 public abstract class App {
 
-    private Config config;
-    private EntityManager entityManager;
+
 
     public App() {
 
     }
 
     public void start() {
-        config = initConfig();
-        entityManager = initDatabase();
+        Container.getInstance().setConfig(initConfig());
+        Container.getInstance().setEntityManager(initDatabase());
         registerAuthRoutes();
         register();
     }
@@ -54,6 +53,7 @@ public abstract class App {
     private EntityManager initDatabase() {
         Map<String, Object> props = new HashMap<>();
 
+        final Config config = Container.getInstance().getConfig();
         String database = config.getProperties().getProperty("database.database");
         String host = config.getProperties().getProperty("database.host");
 
@@ -67,19 +67,4 @@ public abstract class App {
         return factory.createEntityManager();
     }
 
-    public Config getConfig() {
-        return config;
-    }
-
-    public void setConfig(Config config) {
-        this.config = config;
-    }
-
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
-
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
 }
