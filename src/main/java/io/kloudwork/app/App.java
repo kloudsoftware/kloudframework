@@ -20,6 +20,7 @@ public abstract class App {
     }
 
     public void start() {
+        System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
         Container.getInstance().setConfig(initConfig());
         Container.getInstance().setEntityManager(initDatabase());
         registerAuthRoutes();
