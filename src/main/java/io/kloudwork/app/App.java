@@ -34,7 +34,6 @@ public abstract class App {
         Spark.get("/register", loginController::register);
 
         Spark.post("/login", loginController::postLogin);
-        Spark.post("/logout", loginController::postLogout);
         Spark.post("/register", loginController::postRegister);
     }
 
