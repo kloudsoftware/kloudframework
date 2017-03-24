@@ -9,16 +9,20 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
+import spark.Session;
 import spark.Spark;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.Optional;
+import java.util.Random;
 
 public class LoginController {
     private static LoginController ourInstance = new LoginController();
 
     private final UserRepository userRepository;
+    private final SecureRandom secureRandom = new SecureRandom();
 
     private LoginController() {
         userRepository = new UserRepository();
@@ -34,6 +38,7 @@ public class LoginController {
 
     public String logout(Request request, Response response) {
         request.session().removeAttribute("username");
+        request.session().removeAttribute("csrf-token");
         request.session().invalidate();
         return "Logged out";
     }
@@ -59,7 +64,9 @@ public class LoginController {
 
         User user = userOptional.get();
 
-        request.session().attribute("username", user.getUsername());
+        final Session session = request.session();
+        session.attribute("username", user.getUsername());
+        session.attribute("csrf-token", generateCSRFToken(64));
 
         response.status(200);
         return "Logged in";
@@ -80,5 +87,18 @@ public class LoginController {
         entityManager.persist(user);
         entityManager.getTransaction().commit();
         return "registered";
+    }
+
+    private String generateCSRFToken(int length) {
+        char[] validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456879".toCharArray();
+        Random random = new Random();
+        char[] buffer = new char[length];
+        for (int i = 0; i < length; ++i) {
+            if ((i % 10) == 0) {
+                random.setSeed(secureRandom.nextLong());
+            }
+            buffer[i] = validChars[random.nextInt(validChars.length)];
+        }
+        return new String(buffer);
     }
 }
