@@ -18,6 +18,11 @@ public class Controller {
 
     public String index(Request request, Response response) {
         final HashMap<String, String> model = new HashMap<>();
-        return Renderer.render(model, "index.ftl");
+        return Renderer.render(model, "index.ftl", request);
+    }
+
+    public String register(Request request, Response response) {
+        final HashMap<String, String> model = new HashMap<>();
+        return Renderer.render(model, "register.ftl", request);
     }
 }
