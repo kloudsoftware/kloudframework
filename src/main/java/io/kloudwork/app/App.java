@@ -2,6 +2,8 @@ package io.kloudwork.app;
 
 import io.kloudwork.config.Config;
 import io.kloudwork.controller.LoginController;
+import io.kloudwork.routes.HTTPVerb;
+import io.kloudwork.routes.Router;
 import spark.Spark;
 
 import javax.persistence.EntityManager;
@@ -21,23 +23,26 @@ public abstract class App {
 
     public void start() {
         System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
+        Router router = new Router();
         Container.getInstance().setConfig(initConfig());
         Container.getInstance().setEntityManager(initDatabase());
-        registerAuthRoutes();
-        register();
+        registerAuthRoutes(router);
+        register(router);
+        router.finish();
     }
 
-    protected void registerAuthRoutes() {
+    protected void registerAuthRoutes(Router router) {
         LoginController loginController = LoginController.getInstance();
-        Spark.get("/login", loginController::login);
-        Spark.get("/logout", loginController::logout);
-        Spark.get("/register", loginController::register);
+
+        router.register(HTTPVerb.GET, "/login", loginController::login);
+        router.register(HTTPVerb.GET, "/logout", loginController::logout);
+        router.register(HTTPVerb.GET, "/register", loginController::register);
 
         Spark.post("/login", loginController::postLogin);
         Spark.post("/register", loginController::postRegister);
     }
 
-    protected abstract void register();
+    protected abstract void register(Router router);
 
     private Config initConfig() {
         Config config = null;

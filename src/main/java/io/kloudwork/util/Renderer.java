@@ -13,7 +13,7 @@ public class Renderer {
 
         final String token = request.session().attribute("csrf-token");
         if  (token != null) {
-            model.put("csrf-token", token);
+            model.put("_csrftoken", token);
         }
 
         return engine.render(new ModelAndView(model, viewName));

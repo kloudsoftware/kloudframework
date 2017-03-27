@@ -1,34 +1,62 @@
 package io.kloudwork.routes;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import spark.Filter;
+import spark.Spark;
+
+import java.util.*;
 
 public class Router {
-    Map<Route, List<Filter>> routes;
+    private Map<Route, List<Filter>> routes;
 
     public Router() {
         this.routes = new HashMap<>();
     }
 
-    public void register(HTTPVerb verb, String route) {
+    public void register(HTTPVerb verb, String path, spark.Route route) {
+        if (verb == HTTPVerb.GET) {
+            Spark.get(path, route);
+        } else {
+            Spark.post(path, route);
+        }
+        // TODO: 25.03.2017 Impl all other Verbs
     }
 
-    public void register(HTTPVerb verb, String, Filter filter){
+    public void register(HTTPVerb verb, String path, spark.Route route, Filter filter) {
+        Route ourRoute = new Route(verb, path);
+        if (verb == HTTPVerb.GET) {
+            Spark.get(path, route);
+        } else {
+            Spark.post(path, route);
+        }
+        routes.put(ourRoute, Collections.singletonList(filter));
+
+        // TODO: 25.03.2017 Impl all other Verbs
+    }
+
+    public void register(HTTPVerb verb, String path, spark.Route route, List<Filter> filters) {
+        Route ourRoute = new Route(verb, path);
+        if (verb == HTTPVerb.GET) {
+            Spark.get(path, route);
+        } else {
+            Spark.post(path, route);
+        }
+        routes.put(ourRoute, filters);
+        // TODO: 25.03.2017 Impl all other Verbs
+    }
+
+    public void registerWithAuth(String route) {
 
     }
 
-    public void register(HTTPVerb verb, String, List<Filter> filters) {
+    public void registerWithoutCSRF(String route) {
 
     }
 
-    public void registerWithAuth(HTTPVerb verb, String route) {
-
+    public void finish() {
+        for (Route route : routes.keySet()) {
+            List<Filter> filters = routes.get(route);
+            Spark.before(route.getPath(), filters.toArray(new Filter[filters.size()]));
+        }
     }
-
-    public void registerWithoutCSRF(HTTPVerb verb, String route) {
-
-    }
-
-
 }
