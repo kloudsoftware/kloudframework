@@ -1,6 +1,9 @@
 package io.kloudwork.routes;
 
 
+import com.sun.istack.internal.Nullable;
+import io.kloudwork.routes.filter.AuthFilter;
+import io.kloudwork.routes.filter.CSRFFilter;
 import spark.Filter;
 import spark.Spark;
 
@@ -14,48 +17,76 @@ public class Router {
     }
 
     public void register(HTTPVerb verb, String path, spark.Route route) {
-        if (verb == HTTPVerb.GET) {
-            Spark.get(path, route);
-        } else {
-            Spark.post(path, route);
-        }
-        // TODO: 25.03.2017 Impl all other Verbs
+        addRoute(verb, path, route);
     }
 
     public void register(HTTPVerb verb, String path, spark.Route route, Filter filter) {
         Route ourRoute = new Route(verb, path);
-        if (verb == HTTPVerb.GET) {
-            Spark.get(path, route);
-        } else {
-            Spark.post(path, route);
-        }
+        addRoute(verb, path, route);
         routes.put(ourRoute, Collections.singletonList(filter));
-
-        // TODO: 25.03.2017 Impl all other Verbs
     }
 
     public void register(HTTPVerb verb, String path, spark.Route route, List<Filter> filters) {
         Route ourRoute = new Route(verb, path);
-        if (verb == HTTPVerb.GET) {
-            Spark.get(path, route);
-        } else {
-            Spark.post(path, route);
-        }
+        addRoute(verb, path, route);
         routes.put(ourRoute, filters);
-        // TODO: 25.03.2017 Impl all other Verbs
     }
 
-    public void registerWithAuth(String route) {
+    public void registerWithAuth(HTTPVerb verb, String path, spark.Route route, @Nullable List<Filter> filters) {
+        if (filters == null) {
+            filters = new ArrayList<>();
+        }
 
+        filters.add(new AuthFilter());
+
+        register(verb, path, route, filters);
     }
 
-    public void registerWithoutCSRF(String route) {
+    public void registerWithoutCSRF(String path, spark.Route route, @Nullable List<Filter> filters) {
+        if (filters != null) {
+            Spark.before(path, filters.toArray(new Filter[filters.size()]));
+        }
+        Spark.post(path, route);
+    }
 
+    private void addRoute(HTTPVerb verb, String path, spark.Route route) {
+        switch (verb) {
+            case GET:
+                Spark.get(path, route);
+                break;
+            case POST:
+                Spark.post(path, route);
+                break;
+            case PUT:
+                Spark.put(path, route);
+                break;
+            case HEAD:
+                Spark.head(path, route);
+                break;
+            case PATCH:
+                Spark.patch(path, route);
+                break;
+            case TRACE:
+                Spark.trace(path, route);
+                break;
+            case DELETE:
+                Spark.delete(path, route);
+                break;
+            case CONNECT:
+                Spark.connect(path, route);
+                break;
+            case OPTIONS:
+                Spark.options(path, route);
+                break;
+        }
     }
 
     public void finish() {
         for (Route route : routes.keySet()) {
             List<Filter> filters = routes.get(route);
+            if (route.getVerb() == HTTPVerb.POST) {
+                filters.add(new CSRFFilter());
+            }
             Spark.before(route.getPath(), filters.toArray(new Filter[filters.size()]));
         }
     }

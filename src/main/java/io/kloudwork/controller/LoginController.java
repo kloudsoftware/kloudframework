@@ -5,6 +5,7 @@ import io.kloudwork.models.User;
 import io.kloudwork.persistence.UserRepository;
 import io.kloudwork.util.MultipartFormHandler;
 import io.kloudwork.util.PostParamHolder;
+import io.kloudwork.util.Renderer;
 import org.apache.commons.fileupload.FileUploadException;
 import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
@@ -15,6 +16,7 @@ import spark.Spark;
 import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
 
@@ -33,7 +35,7 @@ public class LoginController {
     }
 
     public String login(Request request, Response response) {
-        return "";
+        return Renderer.render(new HashMap<>(), "login.ftl", request);
     }
 
     public String logout(Request request, Response response) {
