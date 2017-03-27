@@ -14,6 +14,9 @@ import java.util.Map;
 
 public class MultipartFormHandler {
     public static PostParamHolder handle(Request request) throws IOException, FileUploadException {
+        if (!ServletFileUpload.isMultipartContent(request.raw())) {
+            return parseContent(request);
+        }
         ServletFileUpload servletFileUpload = new ServletFileUpload();
         FileItemIterator iterator = servletFileUpload.getItemIterator(request.raw());
 
@@ -36,5 +39,10 @@ public class MultipartFormHandler {
         }
 
         return new PostParamHolder(postParameters, files);
+    }
+
+    private static PostParamHolder parseContent(Request request) {
+        request.contentType();
+        return null;
     }
 }

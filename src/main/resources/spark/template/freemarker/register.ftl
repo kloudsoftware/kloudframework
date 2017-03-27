@@ -3,7 +3,11 @@
 
     </head>
     <body>
-    <input type="hidden" value="">
-    <p>${_csrftoken}</p>
+    <form action="/register">
+        <input type="hidden" value="${_csrftoken}">
+        <input type="text">
+        <button>Ok</button>
+    </form>
+    <p></p>
     </body>
 </html>
