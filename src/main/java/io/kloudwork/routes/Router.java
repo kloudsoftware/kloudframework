@@ -4,6 +4,7 @@ package io.kloudwork.routes;
 import com.sun.istack.internal.Nullable;
 import io.kloudwork.routes.filter.AuthFilter;
 import io.kloudwork.routes.filter.CSRFFilter;
+import io.kloudwork.routes.filter.NullFilter;
 import spark.Filter;
 import spark.Spark;
 
@@ -17,18 +18,17 @@ public class Router {
     }
 
     public void register(HTTPVerb verb, String path, spark.Route route) {
-        addRoute(verb, path, route);
+        Route ourRoute = new Route(verb, path, route);
+        routes.put(ourRoute, Collections.singletonList(new NullFilter()));
     }
 
     public void register(HTTPVerb verb, String path, spark.Route route, Filter filter) {
-        Route ourRoute = new Route(verb, path);
-        addRoute(verb, path, route);
+        Route ourRoute = new Route(verb, path, route);
         routes.put(ourRoute, Collections.singletonList(filter));
     }
 
     public void register(HTTPVerb verb, String path, spark.Route route, List<Filter> filters) {
-        Route ourRoute = new Route(verb, path);
-        addRoute(verb, path, route);
+        Route ourRoute = new Route(verb, path, route);
         routes.put(ourRoute, filters);
     }
 
@@ -82,8 +82,10 @@ public class Router {
     }
 
     public void finish() {
-        for (Route route : routes.keySet()) {
-            List<Filter> filters = routes.get(route);
+        for (Map.Entry<Route, List<Filter>> routeFilterEntry : routes.entrySet()) {
+            final Route route = routeFilterEntry.getKey();
+            final List<Filter> filters = routeFilterEntry.getValue();
+            addRoute(route.getVerb(), route.getPath(), route.getHandler());
             if (route.getVerb() == HTTPVerb.POST) {
                 filters.add(new CSRFFilter());
             }
