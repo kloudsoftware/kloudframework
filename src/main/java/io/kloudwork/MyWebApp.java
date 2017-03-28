@@ -14,7 +14,7 @@ public final class MyWebApp extends App {
     /**
      * Register your routes and middleware here.
      *
-     * @param router
+     * @param router Router used to register routes.
      */
     @Override
     protected void register(Router router) {
