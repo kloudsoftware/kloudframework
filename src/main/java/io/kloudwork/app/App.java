@@ -61,8 +61,9 @@ public abstract class App {
         final Config config = Container.getInstance().getConfig();
         String database = config.getProperties().getProperty("database.database");
         String host = config.getProperties().getProperty("database.host");
+        String timeZone = config.getProperties().getProperty("database.timezone");
 
-        String jdbcUrl = "jdbc:mysql://" + host + "/"  + database;
+        String jdbcUrl = "jdbc:mysql://" + host + "/"  + database+ "?serverTimezone=" + timeZone;
 
         props.put("hibernate.connection.url", jdbcUrl);
         props.put("hibernate.connection.username", config.getProperties().getProperty("database.user"));
