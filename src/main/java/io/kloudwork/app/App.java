@@ -4,6 +4,7 @@ import io.kloudwork.config.Config;
 import io.kloudwork.controller.LoginController;
 import io.kloudwork.routes.HTTPVerb;
 import io.kloudwork.routes.Router;
+import org.hibernate.cfg.Configuration;
 import spark.Spark;
 
 import javax.persistence.EntityManager;
@@ -22,6 +23,8 @@ public abstract class App {
     }
 
     public void start() {
+        Configuration cfg = new Configuration();
+        cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLInnoDBDialect");
         System.setProperty("org.slf4j.simpleLogger.logFile", "System.out");
         Router router = new Router();
         Container.getInstance().setConfig(initConfig());
