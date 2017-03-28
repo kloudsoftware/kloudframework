@@ -48,6 +48,10 @@ public class Router {
         Spark.post(path, route);
     }
 
+    public void registerWithoutCSRF(String path, spark.Route route) {
+        this.registerWithoutCSRF(path, route, null);
+    }
+
     private void addRoute(HTTPVerb verb, String path, spark.Route route) {
         switch (verb) {
             case GET:

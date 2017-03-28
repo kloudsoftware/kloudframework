@@ -41,8 +41,8 @@ public abstract class App {
         router.register(HTTPVerb.GET, "/logout", loginController::logout);
         router.register(HTTPVerb.GET, "/register", loginController::register);
 
-        Spark.post("/login", loginController::postLogin);
-        Spark.post("/register", loginController::postRegister);
+        router.registerWithoutCSRF("/login", loginController::postLogin);
+        router.registerWithoutCSRF("/register", loginController::postRegister);
     }
 
     protected abstract void register(Router router);

@@ -4,6 +4,7 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.template.freemarker.FreeMarkerEngine;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Renderer {
@@ -17,5 +18,9 @@ public class Renderer {
         }
 
         return engine.render(new ModelAndView(model, viewName));
+    }
+
+    public static String render(String viewName, Request request) {
+        return render(new HashMap<>(), viewName, request);
     }
 }
