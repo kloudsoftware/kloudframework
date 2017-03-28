@@ -3,8 +3,6 @@ package io.kloudwork.controller;
 import io.kloudwork.app.Container;
 import io.kloudwork.models.User;
 import io.kloudwork.persistence.UserRepository;
-import io.kloudwork.util.MultipartFormHandler;
-import io.kloudwork.util.PostParamHolder;
 import io.kloudwork.util.Renderer;
 import org.apache.commons.fileupload.FileUploadException;
 import org.mindrot.jbcrypt.BCrypt;
@@ -50,14 +48,13 @@ public class LoginController {
     }
 
     public String postLogin(Request request, Response response) throws IOException, FileUploadException {
-        PostParamHolder params = MultipartFormHandler.handle(request);
         boolean matched = false;
 
-        Optional<User> userOptional = userRepository.findByUserName(params.getParameters().get("username"));
+        Optional<User> userOptional = userRepository.findByUserName(request.queryParams("username"));
 
         if (userOptional.isPresent()) {
             String userPassword = userOptional.get().getPassword();
-            matched = BCrypt.checkpw(params.getParameters().get("password"), userPassword);
+            matched = BCrypt.checkpw(request.queryParams("password"), userPassword);
         }
 
         if (!matched) {
@@ -75,13 +72,12 @@ public class LoginController {
     }
 
     public String postRegister(Request request, Response response) throws IOException, FileUploadException {
-        PostParamHolder params = MultipartFormHandler.handle(request);
 
         String salt = BCrypt.gensalt();
-        String hash = BCrypt.hashpw(params.getParameters().get("password"), salt);
+        String hash = BCrypt.hashpw(request.queryParams("password"), salt);
 
         User user = new User();
-        user.setUsername(params.getParameters().get("username"));
+        user.setUsername(request.queryParams("username"));
         user.setPassword(hash);
 
         EntityManager entityManager = Container.getInstance().getEntityManager();

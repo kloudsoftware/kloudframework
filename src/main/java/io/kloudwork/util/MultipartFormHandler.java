@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MultipartFormHandler {
-    public static PostParamHolder handle(Request request) throws IOException, FileUploadException {
+    public static MultipartParamHolder handle(Request request) throws IOException, FileUploadException {
         if (!ServletFileUpload.isMultipartContent(request.raw())) {
             return parseContent(request);
         }
@@ -35,13 +35,13 @@ public class MultipartFormHandler {
         }
 
         if (files.isEmpty()) {
-            return new PostParamHolder(postParameters);
+            return new MultipartParamHolder(postParameters);
         }
 
-        return new PostParamHolder(postParameters, files);
+        return new MultipartParamHolder(postParameters, files);
     }
 
-    private static PostParamHolder parseContent(Request request) {
+    private static MultipartParamHolder parseContent(Request request) {
         request.contentType();
         return null;
     }

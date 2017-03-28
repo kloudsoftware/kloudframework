@@ -27,11 +27,7 @@ public final class MyWebApp extends App {
     protected void register(Router router) {
         Controller controller = Controller.getInstance();
         router.register(HTTPVerb.GET, "/", controller::index);
-        List<Filter> myFilters = Arrays.asList((request, response) -> System.out.println("One filter"), (request, response) -> System.out.println("2nd Filter"));
-        router.register(HTTPVerb.GET, "/2filters", controller::index, myFilters);
         router.register(HTTPVerb.GET, "/filter", controller::index, (request, response) -> System.out.println("Filtering works"));
         router.register(HTTPVerb.GET, "/csrf", controller::register);
     }
-
-
 }

@@ -1,19 +1,19 @@
 package io.kloudwork.controller;
 
+import io.kloudwork.util.Renderer;
 import spark.Request;
 import spark.Response;
-import io.kloudwork.util.Renderer;
 
 import java.util.HashMap;
 
 public class Controller {
     private static Controller ourInstance = new Controller();
 
-    public static Controller getInstance() {
-        return ourInstance;
+    private Controller() {
     }
 
-    private Controller() {
+    public static Controller getInstance() {
+        return ourInstance;
     }
 
     public String index(Request request, Response response) {
