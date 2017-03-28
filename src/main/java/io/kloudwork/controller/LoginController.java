@@ -14,7 +14,6 @@ import spark.Spark;
 import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
 
@@ -33,7 +32,7 @@ public class LoginController {
     }
 
     public String login(Request request, Response response) {
-        return Renderer.render(new HashMap<>(), "login.ftl", request);
+        return Renderer.render("login.ftl", request);
     }
 
     public String logout(Request request, Response response) {
@@ -44,7 +43,7 @@ public class LoginController {
     }
 
     public String register(Request request, Response response) {
-        return "";
+        return Renderer.render("register.ftl", request);
     }
 
     public String postLogin(Request request, Response response) throws IOException, FileUploadException {
