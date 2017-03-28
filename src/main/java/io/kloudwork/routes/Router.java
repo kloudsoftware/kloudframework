@@ -32,7 +32,7 @@ public class Router {
         routes.put(ourRoute, filters);
     }
 
-    public void registerWithAuth(HTTPVerb verb, String path, spark.Route route, @Nullable List<Filter> filters) {
+    public void registerWithAuth(HTTPVerb verb, String path, spark.Route route, List<Filter> filters) {
         if (filters == null) {
             filters = new ArrayList<>();
         }
@@ -42,7 +42,7 @@ public class Router {
         register(verb, path, route, filters);
     }
 
-    public void registerWithoutCSRF(String path, spark.Route route, @Nullable List<Filter> filters) {
+    public void registerWithoutCSRF(String path, spark.Route route, List<Filter> filters) {
         if (filters != null) {
             Spark.before(path, filters.toArray(new Filter[filters.size()]));
         }
