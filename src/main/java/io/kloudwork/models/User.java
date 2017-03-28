@@ -3,7 +3,7 @@ package io.kloudwork.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "User")
+@Table(name = "User", schema = "kloudwork-template")
 public class User {
 
     @Id
