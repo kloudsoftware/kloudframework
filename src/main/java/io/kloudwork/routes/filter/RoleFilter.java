@@ -25,7 +25,6 @@ public class RoleFilter implements Filter {
         }
 
         UserRepository userRepository = new UserRepository();
-
         User user = userRepository.findByUserName(username).orElseThrow(() -> Spark.halt(401, "User not found"));
 
         if (!allowedRoles.contains(user.getRole())) {
