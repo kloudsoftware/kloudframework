@@ -5,17 +5,19 @@ import io.kloudwork.controller.LoginController;
 import io.kloudwork.routes.HTTPVerb;
 import io.kloudwork.routes.Router;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.jpa.AvailableSettings;
 import spark.Spark;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class App {
-
 
 
     public App() {
@@ -58,6 +60,8 @@ public abstract class App {
         return config;
     }
 
+    protected abstract void getEntityClasses(List<Class<?>> entityClasses);
+
     private EntityManager initDatabase() {
         Map<String, Object> props = new HashMap<>();
 
@@ -66,9 +70,14 @@ public abstract class App {
         String host = config.getProperties().getProperty("database.host");
         String timeZone = config.getProperties().getProperty("database.timezone");
 
-        String jdbcUrl = "jdbc:mysql://" + host + "/"  + database+ "?serverTimezone=" + timeZone;
+        String jdbcUrl = "jdbc:mysql://" + host + "/" + database + "?serverTimezone=" + timeZone;
+
+        List<Class<?>> entityClasses = new ArrayList<>();
+
+        this.getEntityClasses(entityClasses);
 
         props.put("hibernate.connection.url", jdbcUrl);
+        props.put(AvailableSettings.LOADED_CLASSES, entityClasses);
         props.put("hibernate.connection.username", config.getProperties().getProperty("database.user"));
         props.put("hibernate.connection.password", config.getProperties().getProperty("database.password"));
         final EntityManagerFactory factory = Persistence.createEntityManagerFactory("mysql", props);
