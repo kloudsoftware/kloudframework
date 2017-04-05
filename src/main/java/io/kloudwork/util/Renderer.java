@@ -11,7 +11,6 @@ public class Renderer {
     private static FreeMarkerEngine engine = new FreeMarkerEngine();
 
     public static String render(Map<String, String> model, String viewName, Request request) {
-
         final String token = request.session().attribute("csrf-token");
         if  (token != null) {
             model.put("_csrftoken", token);
